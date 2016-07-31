@@ -9,7 +9,7 @@ class Game:
         cells = board["cells"]
         for i in range(board["figures_count"]):
             self.cells[i] = Cell(i,self)
-            self.cells.inc()
+            self.cells[i].inc()
 
         for i, row in enumerate(cells):
             for j, cur_id in enumerate(row):
