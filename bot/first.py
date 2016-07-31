@@ -7,23 +7,25 @@ class Game:
         self.cells = dict()
         # self.not_used = dict()
         cells = board["cells"]
+        for i in range(board["figures_count"]):
+            self.cells[i] = Cell(i,self)
+
         for i, row in enumerate(cells):
             for j, cur_id in enumerate(row):
-                cur_cell = self.cells.setdefault(cur_id, Cell(cur_id, self))
+                cur_cell = self.cells[cells[i][j]]
                 if i != 0:
-                    add_neigh(self.cells[cells[i-1][j]], cur_cell)
+                    neigh_id = cells[i-1][j]
+                    add_neigh(self.cells[neigh_id], cur_cell)
                 if j != 0:
-                    add_neigh(self.cells[cells[i][j-1]], cur_cell)
+                    neigh_id = cells[i][j-1]
+                    add_neigh(self.cells[neigh_id], cur_cell)
                 if i % 2 == 0 and i > 0 and j > 0:
-                    add_neigh(self.cells[cells[i-1][j-1]], cur_cell )
+                    neigh_id = cells[i-1][j-1]                    
+                    add_neigh(self.cells[neigh_id], cur_cell )
                 elif i % 2 != 0 and i > 0 and j < len(row) - 1:
-                    add_neigh(self.cells[cells[i-1][j+1]], cur_cell )
-        print("####### neigh:")
-        print(board)
-        for id,c in self.cells.items():
-            print(c.id, c.neigh)
-
-
+                    neigh_id = cells[i-1][j+1]                    
+                    add_neigh(self.cells[neigh_id], cur_cell )
+        
 def add_neigh(cell, cur_cell):
     if cell.id != cur_cell.id:
         cur_cell.add(cell.id)
@@ -42,24 +44,23 @@ class Cell:
         self.neigh.add(id)
         # self.neigh[id] = True
 
-    def can_color(self, color):
+    def can_color(self, col):
         if self.color != -1:
             return False
         for neigh_id in self.neigh:
             c = self.game.cells[neigh_id]
-            if c.color == color:
+            if c.color == col:
                 return False
         return True
 
-
-def max_count(id, color):
+def max_count(id, col):
     game = games[id]
     for id, c in game.cells.items():
-        if c.can_color(color):
-            game.cells[id].color = color
+        if c.can_color(col):
+            game.cells[id].color = col
             return id
 
 
-def enemy_step(id, fig, color):
+def enemy_step(id, fig, col):
     game = games[id]
-    game.cells[fig].color = color
+    game.cells[fig].color = col
