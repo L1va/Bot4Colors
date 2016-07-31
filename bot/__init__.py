@@ -10,3 +10,5 @@ def setup_logging():
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel('DEBUG')
     root_logger.addHandler(handler)
+
+setup_logging()
