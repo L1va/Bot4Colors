@@ -1,22 +1,20 @@
 
 from collections import Counter
-import operator
 games = dict()
 
 class Game:
     def __init__(self, board):
         print(board)
         self.count = board["figures_count"]
-        c = Counter()
+        self.cnt = Counter()
         for row in board["cells"]:
-            c.update(row)
-        self.cnt = dict(c)
+            self.cnt.update(row)
         self.used = []
 
 
 def max_count(id, color):
     game = games[id]
-    fig, count = min(game.cnt.items(), key=operator.itemgetter(1))
+    fig, count = game.cnt.most_common(1)[0]
     use(game, fig)
     return fig
     # for i in range(game.count):
