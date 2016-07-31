@@ -9,12 +9,8 @@ class Game:
         cells = board["cells"]
         for i, row in enumerate(cells):
             for j, cur_id in enumerate(row):
-                if cur_id in self.cells:
-                    cur_cell = self.cells[cur_id]
-                else:
-                    cur_cell = Cell(cur_id, self)
-                    self.cells[cur_id] = cur_cell
-                    # self.not_used[cur_id] = True
+                cur_cell = self.cells.get(cur_id, Cell(cur_id, self))
+
                 if i != 0:
                     add_neigh(cells[i-1][j], cur_id, cur_cell, self.cells)
                 if j != 0:
