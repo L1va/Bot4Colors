@@ -36,15 +36,18 @@ class Cell:
     def __init__(self, id, game):
         self.game = game
         self.id = id
-        self.neigh = dict()
+        # self.neigh = dict()
+        self.neigh = set()
         self.color = -1
 
     def add(self, id):
-        self.neigh[id] = True
+        self.neigh.add(id)
+        # self.neigh[id] = True
 
     def can_color(self, color):
-        for id, v in self.neigh.items():
-            c = self.game.cells[id]
+        # for id, v in self.neigh.items():
+        for neigh_id in self.neigh:
+            c = self.game.cells[neigh_id]
             if c.color == color:
                 return False
         return True
