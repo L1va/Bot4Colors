@@ -18,7 +18,7 @@ def new_game_handler():
 
     logger = make_logger(app.logger, id)
     logger.info('New game handler')
-    logger.info('Board data: %s', board)
+    # logger.info('Board data: %s', board)
 
     games[id] = Game(board)
     return jsonify(status='ok')
@@ -32,6 +32,8 @@ def get_game_handler(id):
     logger.info('Calculate turn')
 
     answer = max_count(id, request.args["color"])
+
+    logger.info('Our answer %s', answer)
 
     return jsonify(status='ok', figure=answer)
 
