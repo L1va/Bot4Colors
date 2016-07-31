@@ -10,22 +10,24 @@ class Game:
         for i, row in enumerate(cells):
             for j, cur_id in enumerate(row):
                 cur_cell = self.cells.setdefault(cur_id, Cell(cur_id, self))
-
                 if i != 0:
-                    add_neigh(cells[i-1][j], cur_id, cur_cell, self.cells)
+                    add_neigh(self.cells[cells[i-1][j]], cur_cell)
                 if j != 0:
-                    add_neigh(cells[i][j-1], cur_id, cur_cell, self.cells)
+                    add_neigh(self.cells[cells[i][j-1]], cur_cell)
                 if i % 2 == 0 and i > 0 and j > 0:
-                    add_neigh(cells[i-1][j-1], cur_id, cur_cell, self.cells)
+                    add_neigh(self.cells[cells[i-1][j-1]], cur_cell )
                 elif i % 2 != 0 and i > 0 and j < len(row) - 1:
-                    add_neigh(cells[i-1][j+1], cur_id, cur_cell, self.cells)
+                    add_neigh(self.cells[cells[i-1][j+1]], cur_cell )
+        print("####### neigh:")
+        print(board)
+        for id,c in self.cells:
+            print(c.id, c.neigh)
 
 
-def add_neigh(id, cur_id, cur_cell, cells):
-    if id != cur_id:
-        cur_cell.add(id)
-        left_c = cells[id]
-        left_c.add(cur_id)
+def add_neigh(cell, cur_cell):
+    if cell.id != cur_cell.id:
+        cur_cell.add(cell.id)
+        cell.add(cur_cell.id)
 
 
 class Cell:
@@ -41,7 +43,8 @@ class Cell:
         # self.neigh[id] = True
 
     def can_color(self, color):
-        # for id, v in self.neigh.items():
+        if c.color != -1:
+            return False
         for neigh_id in self.neigh:
             c = self.game.cells[neigh_id]
             if c.color == color:
@@ -52,8 +55,8 @@ class Cell:
 def max_count(id, color):
     game = games[id]
     for id, c in game.cells.items():
-        if c.color == -1 and c.can_color(color):
-            c.color = color
+        if c.can_color(color):
+            game.cells[id].color = color
             return id
 
 
