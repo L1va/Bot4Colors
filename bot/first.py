@@ -20,7 +20,7 @@ class Game:
                     add_neigh(self.cells[cells[i-1][j+1]], cur_cell )
         print("####### neigh:")
         print(board)
-        for id,c in self.cells:
+        for id,c in self.cells.items():
             print(c.id, c.neigh)
 
 
@@ -43,7 +43,7 @@ class Cell:
         # self.neigh[id] = True
 
     def can_color(self, color):
-        if c.color != -1:
+        if self.color != -1:
             return False
         for neigh_id in self.neigh:
             c = self.game.cells[neigh_id]
