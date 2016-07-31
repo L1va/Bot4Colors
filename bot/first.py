@@ -6,15 +6,14 @@ games = dict()
 
 class Game:
     def __init__(self, board):
-        print(board)
         #self.count = board["figures_count"]
         self.cells = dict()
-        #self.not_used = dict()     
-        cells = board["cells"]   
+        #self.not_used = dict()
+        cells = board["cells"]
         for i in range (len(cells)):
             row = cells[i]
             for j in range(len(row)):
-                cur_id = row[j]                
+                cur_id = row[j]
                 if cur_id in self.cells:
                     cur_cell = self.cells[cur_id]
                 else:
@@ -31,7 +30,7 @@ class Game:
                     add_neigh(cells[i-1][j+1], cur_id, cur_cell, self.cells)
 
 
-def add_neigh(id, cur_id,cur_cell, cells):    
+def add_neigh(id, cur_id,cur_cell, cells):
     if id!=cur_id:
         cur_cell.add(id)
         left_c = cells[id]
@@ -60,8 +59,8 @@ def max_count(id, color):
         if c.color==-1 and c.can_color(color):
             c.color = color
             return id
-    
+
 def enemy_step(id, fig, color):
     game = games[id]
     game.cells[fig].color = color
-  
+
