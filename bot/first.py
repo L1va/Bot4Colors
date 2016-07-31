@@ -41,8 +41,7 @@ class Cell:
         self.color = -1
 
     def add(self, id):
-        if id not in self.neigh:
-            self.neigh[id] = True
+        self.neigh[id] = True
 
     def can_color(self, color):
         for id,v in self.neigh.items():
@@ -55,6 +54,7 @@ def max_count(id, color):
     game = games[id]
     for id,c in game.cells.items():
         if c.color==-1 and c.can_color(color):
+            c.color = color
             return id
     
 def enemy_step(id, fig, color):
