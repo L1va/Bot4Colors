@@ -1,1 +1,1 @@
-from web import app
+from bot.web import app
