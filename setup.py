@@ -8,5 +8,6 @@ setup(
     author_email='gomzik000@gmail.com',
     packages=find_packages(),
     install_requires=[
-        'Flask==0.11'
+        'Flask==0.11',
+        'gunicorn==19.6.0'
     ])
