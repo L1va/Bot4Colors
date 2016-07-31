@@ -13,7 +13,7 @@ class Game:
         for i, row in enumerate(cells):
             for j, cur_id in enumerate(row):
                 cur_cell = self.cells[cells[i][j]]
-                self.cells[cur_cell].inc()
+                cur_cell.inc()
                 if i != 0:
                     neigh_id = cells[i-1][j]
                     add_neigh(self.cells[neigh_id], cur_cell)
