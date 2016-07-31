@@ -9,7 +9,7 @@ class Game:
         cells = board["cells"]
         for i, row in enumerate(cells):
             for j, cur_id in enumerate(row):
-                cur_cell = self.cells.get(cur_id, Cell(cur_id, self))
+                cur_cell = self.cells.setdefault(cur_id, Cell(cur_id, self))
 
                 if i != 0:
                     add_neigh(cells[i-1][j], cur_id, cur_cell, self.cells)
