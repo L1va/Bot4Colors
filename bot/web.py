@@ -1,6 +1,3 @@
-import json
-
-
 from flask import Flask, request, jsonify
 
 
@@ -30,7 +27,7 @@ def get_game_handler(id):
 def put_handler(id):
     print('[PUT] games/:id')
     print(id)
-    data = json.loads(request.data)
+    data = request.json
     print(data)
     return jsonify(status='ok')
 
