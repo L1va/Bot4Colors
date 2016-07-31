@@ -2,6 +2,8 @@
 from collections import Counter
 games = dict()
 
+
+
 class Game:
     def __init__(self, board):
         print(board)
@@ -20,18 +22,20 @@ class Game:
                     self.cells[cur_id] = cur_cell
                     #self.not_used[cur_id] = True
                 if i!=0:
-                    up_id = cells[i-1][j]
-                    if up_id!=cur_id:
-                        cur_cell.add(up_id)
-                        up_c = self.cells[up_id]
-                        up_c.add(cur_id)
+                    add_neigh(cells[i-1][j], cur_id, cur_cell, self.cells)
                 if j!=0:
-                    left_id = cells[i][j-1]
-                    if left_id!=cur_id:
-                        cur_cell.add(left_id)
-                        left_c = self.cells[left_id]
-                        left_c.add(cur_id)
+                    add_neigh(cells[i][j-1], cur_id, cur_cell, self.cells)
+                if i%2==0 and i>0 and j>0:
+                    add_neigh(cells[i-1][j-1], cur_id, cur_cell, self.cells)
+                elif i%2!=0 and i>0 and j<len(row)-1:
+                    add_neigh(cells[i-1][j+1], cur_id, cur_cell, self.cells)
 
+
+def add_neigh(id, cur_id,cur_cell, cells):    
+    if id!=cur_id:
+        cur_cell.add(id)
+        left_c = cells[id]
+        left_c.add(cur_id)
 
 class Cell:
     def __init__(self, id, game):
