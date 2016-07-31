@@ -55,7 +55,7 @@ def put_handler(id):
 def delete_handler(id):
     logger = make_logger(app.logger, id)
 
-    logger('[DELETE] End of game')
+    logger.info('[DELETE] End of game')
 
     try:
         del games[id]
