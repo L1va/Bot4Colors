@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 
+from bot.first import *
 
 app = Flask(__name__)
 
@@ -12,6 +13,9 @@ def index():
 @app.route('/games', methods=['POST'])
 def new_game_handler():
     print(request.json)
+    id = request.json["id"]
+    board = request.json["board"]
+    games[id] = Game(board)  
     return jsonify(status='ok')
 
 
@@ -20,7 +24,7 @@ def get_game_handler(id):
     print('[GET] games/:id')
     print(id)
     print(request.args)
-    return jsonify(status='ok', figure=0)
+    return jsonify(status='ok', figure=max_count(id, request.args["color"]))
 
 
 @app.route('/games/<string:id>', methods=['PUT'])
@@ -29,6 +33,7 @@ def put_handler(id):
     print(id)
     data = request.json
     print(data)
+    enemy_step(id, data["figure"], data["color"])
     return jsonify(status='ok')
 
 
@@ -36,4 +41,5 @@ def put_handler(id):
 def delete_handler(id):
     print('[DELETE] /games/:id')
     print(id)
+    del games[id]
     return jsonify(status='ok')
