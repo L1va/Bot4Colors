@@ -57,7 +57,7 @@ def max_count(id, col):
     game = games[id]
     for id, c in game.cells.items():
         if c.can_color(col):
-            game.cells[id].color = col
+            #game.cells[id].color = col
             return id
 
 
