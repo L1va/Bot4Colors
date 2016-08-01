@@ -20,8 +20,9 @@ def new_game_handler():
     logger = make_logger(app.logger, id)
     logger.info('New game handler')
     # logger.info('Board data: %s', board)
-    mc_client.set(id, Game(board))
-    
+    newGame = Game(board)
+    #mc_client.set(id, newGame)
+    games[id] = newGame
     return jsonify(status='ok')
 
 
@@ -32,7 +33,9 @@ def get_game_handler(id):
     logger.info('Color is %s', request.args['color'])
     logger.info('Calculate turn')
 
-    answer = max_count(mc_client.get(id), request.args["color"])
+    game = games[id]
+    #game = mc_client.get(id)
+    answer = max_count(game, request.args["color"])
 
     logger.info('Our answer %s', answer)
 
@@ -50,7 +53,9 @@ def put_handler(id):
         data['figure'], data['color'])
     logger.info('Register enemy step.')
 
-    enemy_step(mc_client.get(id), data["figure"], data["color"])
+    game = games[id]
+    #game = mc_client.get(id)
+    enemy_step(game, data["figure"], data["color"])
     return jsonify(status='ok')
 
 
@@ -61,7 +66,8 @@ def delete_handler(id):
     logger.info('[DELETE] End of game')
 
     try:
-        mc_client.delete(id)
+        del games[id]
+        #mc_client.delete(id)
     except:
         logger.exception('Error while deliting game from memory.')
 
