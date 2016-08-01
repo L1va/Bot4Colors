@@ -68,6 +68,7 @@ def max_count(game, col):
             else:
                 if maximum.count < c.count:
                     maximum = c
+    game.cells[maximum.id].color = col
     return maximum.id
 
 
