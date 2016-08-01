@@ -58,11 +58,10 @@ class Cell:
                 return False
         return True
 
-def max_count(id, col):
-    game = games[id]
+def max_count(game, col):    
     maximum = None
 
-    for id, c in game.cells.items():
+    for _, c in game.cells.items():
         if c.can_color(col):
             if maximum is None:
                 maximum = c
@@ -72,6 +71,5 @@ def max_count(id, col):
     return maximum.id
 
 
-def enemy_step(id, fig, col):
-    game = games[id]
+def enemy_step(game, fig, col):
     game.cells[fig].color = col

@@ -5,6 +5,7 @@ from bot.utils.log import make_logger
 
 app = Flask(__name__)
 
+mc_client = None
 
 @app.route('/')
 def index():
@@ -19,8 +20,8 @@ def new_game_handler():
     logger = make_logger(app.logger, id)
     logger.info('New game handler')
     # logger.info('Board data: %s', board)
-
-    games[id] = Game(board)
+    mc_client.set(id, Game(board))
+    
     return jsonify(status='ok')
 
 
@@ -31,7 +32,7 @@ def get_game_handler(id):
     logger.info('Color is %s', request.args['color'])
     logger.info('Calculate turn')
 
-    answer = max_count(id, request.args["color"])
+    answer = max_count(mc_client.get(id), request.args["color"])
 
     logger.info('Our answer %s', answer)
 
@@ -49,7 +50,7 @@ def put_handler(id):
         data['figure'], data['color'])
     logger.info('Register enemy step.')
 
-    enemy_step(id, data["figure"], data["color"])
+    enemy_step(mc_client.get(id), data["figure"], data["color"])
     return jsonify(status='ok')
 
 
@@ -60,7 +61,7 @@ def delete_handler(id):
     logger.info('[DELETE] End of game')
 
     try:
-        del games[id]
+        mc_client.delete(id)
     except:
         logger.exception('Error while deliting game from memory.')
 
