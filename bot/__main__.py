@@ -12,6 +12,8 @@ if __name__ == '__main__':
 
     global mc_client
     mc_client = redis.Redis(host=redis_url)
+    print(redis_url)
+    print(mc_client)
     #mc_client = memcache.Client([memcache_url], debug=0)
     
     app.run(port=PORT, debug=True)
