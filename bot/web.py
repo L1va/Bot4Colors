@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
 
 from bot.algo import *
+from bot.db import *
 from bot.utils.log import make_logger
 
 app = Flask(__name__)
 
-mc_client = None
 
 @app.route('/')
 def index():
@@ -21,8 +21,8 @@ def new_game_handler():
     logger.info('New game handler')
     # logger.info('Board data: %s', board)
     newGame = Game(board)
-    #mc_client.set(id, newGame)
-    games[id] = newGame
+    redis_set(id, newGame)
+    #games[id] = newGame
     return jsonify(status='ok')
 
 
@@ -33,8 +33,8 @@ def get_game_handler(id):
     logger.info('Color is %s', request.args['color'])
     logger.info('Calculate turn')
 
-    game = games[id]
-    #game = mc_client.get(id)
+    #game = games[id]
+    game = redis_get(id)
     answer = max_count(game, request.args["color"])
 
     logger.info('Our answer %s', answer)
@@ -53,9 +53,10 @@ def put_handler(id):
         data['figure'], data['color'])
     logger.info('Register enemy step.')
 
-    game = games[id]
-    #game = mc_client.get(id)
+    #game = games[id]
+    game = redis_get(id)
     enemy_step(game, data["figure"], data["color"])
+    redis_set(id, game)
     return jsonify(status='ok')
 
 
@@ -66,8 +67,7 @@ def delete_handler(id):
     logger.info('[DELETE] End of game')
 
     try:
-        del games[id]
-        #mc_client.delete(id)
+        redis_del(id)
     except:
         logger.exception('Error while deliting game from memory.')
 
