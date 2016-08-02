@@ -8,6 +8,7 @@ class Game:
         self.steps = []
         self.our_steps = []
         self.height = board["height"]
+        self.first = 'Unknown'
         # self.not_used = dict()
         cells = board["cells"]
         for i in range(board["figures_count"]):
