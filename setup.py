@@ -9,5 +9,6 @@ setup(
     packages=find_packages(),
     install_requires=[
         'Flask==0.11',
-        'gunicorn==19.6.0'
+        'gunicorn==19.6.0',
+        'redis==2.10.5'
     ])
