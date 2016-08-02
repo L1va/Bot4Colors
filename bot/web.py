@@ -32,7 +32,7 @@ def get_game_handler(id):
     #logger.info('Calculate turn')
 
     game = redis_get(id)
-    answer = max_count(game, int(request.args["color"]))
+    answer = best_step(game, int(request.args["color"]))
     redis_set(id, game)
     #logger.info('Our answer %s', answer)
 

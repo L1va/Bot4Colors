@@ -2,14 +2,16 @@ games = dict()
 
 
 class Game:
+    def small(self):
+        return self.height<11 
+
     def __init__(self, board):
-        # self.count = board["figures_count"]
         self.cells = dict()
         self.steps = []
         self.our_steps = []
         self.height = board["height"]
         self.first = 'Unknown'
-        # self.not_used = dict()
+        self.start_from = 0
         cells = board["cells"]
         for i in range(board["figures_count"]):
             self.cells[i] = Cell(i,self)
@@ -20,30 +22,21 @@ class Game:
                 cur_cell.inc()
                 if i != 0:
                     neigh_id = cells[i-1][j]
-                    add_neigh(self.cells[neigh_id], cur_cell)
+                    cur_cell.add_neigh(self.cells[neigh_id])
                 if j != 0:
                     neigh_id = cells[i][j-1]
-                    add_neigh(self.cells[neigh_id], cur_cell)
+                    cur_cell.add_neigh(self.cells[neigh_id])
                 if i % 2 == 0 and i > 0 and j > 0:
                     neigh_id = cells[i-1][j-1]
-                    add_neigh(self.cells[neigh_id], cur_cell )
+                    cur_cell.add_neigh(self.cells[neigh_id])
                 elif i % 2 != 0 and i > 0 and j < len(row) - 1:
                     neigh_id = cells[i-1][j+1]
-                    add_neigh(self.cells[neigh_id], cur_cell )
-    def small(self):
-        return self.height<11 
-
-def add_neigh(cell, cur_cell):
-    if cell.id != cur_cell.id:
-        cur_cell.add(cell.id)
-        cell.add(cur_cell.id)
-
+                    cur_cell.add_neigh(self.cells[neigh_id])
 
 class Cell:
     def __init__(self, id, game):
         self.game = game
         self.id = id
-        # self.neigh = dict()
         self.neigh = set()
         self.color = -1
         self.count = 0
@@ -51,33 +44,42 @@ class Cell:
     def inc(self):
         self.count += 1
 
-    def add(self, id):
-        self.neigh.add(id)
-        # self.neigh[id] = True
+    def add_neigh(self, cell):
+        if self.id != cell.id:
+            self.neigh.add(cell.id)
+            cell.neigh.add(self.id)
 
     def can_color(self, col):
-        if self.color != -1:
-            return False
         for neigh_id in self.neigh:
             c = self.game.cells[neigh_id]
             if c.color == col:
                 return False
         return True
 
-def max_count(game, col):    
-    maximum = None
-    game.first = (col == 0 or col == 2)
+def byCount(cell): #colored - in the end
+    if cell.color!=-1:
+        return 1
+    return -cell.count
 
-    for _, c in game.cells.items():
+def best_step(game, col):    
+    game.first = (col == 0 or col == 2)
+    nextCol = (col + 1) % 4
+
+    cells = sorted(game.cells.values(), key = byCount)
+
+    best = None
+    for c in cells:
+        if c.color!=-1:
+            break
         if c.can_color(col):
-            if maximum is None:
-                maximum = c
-            else:
-                if maximum.count < c.count:
-                    maximum = c
-    #game.cells[maximum.id].color = col
-    game.our_steps.append((maximum.id,col))
-    return maximum.id
+            if best is None:
+                best = c
+            if c.can_color(nextCol):
+                best = c
+                break
+            
+    game.our_steps.append((best.id,col))
+    return best.id
 
 
 def register_step(game, fig, col):
