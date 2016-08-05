@@ -49,6 +49,9 @@ class Cell:
             self.neigh.add(cell.id)
             cell.neigh.add(self.id)
 
+    def is_neigh(self, cell):
+        return cell.id in self.neigh
+
     def can_color(self, col):
         for neigh_id in self.neigh:
             c = self.game.cells[neigh_id]
@@ -68,18 +71,39 @@ def best_step(game, col):
     cells = sorted(game.cells.values(), key = byCount)
 
     best = None
+    cells_to_choose = []
     for c in cells:
         if c.color!=-1:
+            break
+        if best is not None and best.count - c.count > 3:
             break
         if c.can_color(col):
             if best is None:
                 best = c
             if c.can_color(nextCol):
-                best = c
-                break
-            
+                cells_to_choose.append(c)                
+    
+    if len(cells_to_choose)>0:
+        best = try_to_select(cells_to_choose)
+
     game.our_steps.append((best.id,col))
     return best.id
+
+def try_to_select(cells):
+    best = cells[0]
+    bestv = 0
+    size = len(cells)
+    for i in range(size):
+        cur = cells[i].count
+        for j in range(size):
+            if i == j:
+                continue
+            if not cells[i].is_neigh(cells[j]):
+                cur+= cells[j].count
+        if cur > bestv:
+            bestv = cur
+            best = cells[i]
+    return best
 
 
 def register_step(game, fig, col):
