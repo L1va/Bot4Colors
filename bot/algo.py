@@ -14,7 +14,7 @@ class Game:
             if fcount < 6:
                 return 0
             if fcount > 25:
-                return 2
+                return 1
             return 1
         if self.height == 40:
             if fcount < 5:
@@ -24,8 +24,8 @@ class Game:
             if fcount < 20:
                 return 2
             if fcount > 50:
-                return 5
-            return 3
+                return 1
+            return 2
         if self.height == 70:
             if fcount < 5:
                 return 0
@@ -34,12 +34,12 @@ class Game:
             if fcount < 20:
                 return 2
             if fcount > 80:
-                return 7
+                return 2
             if fcount > 60:
-                return 5
+                return 2
             if fcount > 50:
-                return 4
-            return 3
+                return 2
+            return 2
         return 2
 
     def __init__(self, board):
