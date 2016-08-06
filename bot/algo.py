@@ -5,6 +5,43 @@ class Game:
     def small(self):
         return self.height<11 
 
+    def threshold(self, fcount):
+        if self.height == 10:
+            if fcount < 5:
+                return 0
+            return 1
+        if self.height == 20:
+            if fcount < 6:
+                return 0
+            if fcount > 25:
+                return 2
+            return 1
+        if self.height == 40:
+            if fcount < 5:
+                return 0
+            if fcount < 10:
+                return 1               
+            if fcount < 20:
+                return 2
+            if fcount > 50:
+                return 5
+            return 3
+        if self.height == 70:
+            if fcount < 5:
+                return 0
+            if fcount < 10:
+                return 1               
+            if fcount < 20:
+                return 2
+            if fcount > 80:
+                return 7
+            if fcount > 60:
+                return 5
+            if fcount > 50:
+                return 4
+            return 3
+        return 2
+
     def __init__(self, board):
         self.cells = dict()
         self.steps = []
@@ -74,17 +111,20 @@ def best_step(game, col):
     cells = sorted(game.cells.values(), key = byCount)
 
     best = None
+    first = None
     cells_to_choose = []
     for c in cells:
         if c.color!=-1:
             break
-        if best is not None and best.count - c.count > 3:
+        if first is not None and first.count - c.count > game.threshold(first.count):
             break
         if c.can_color(col):
             if best is None:
                 best = c
             if c.can_color(nextCol):
-                cells_to_choose.append(c)                
+                cells_to_choose.append(c)            
+                if first is None:
+                    first = c
     
     if len(cells_to_choose)>0:
         best = try_to_select2(cells_to_choose)
