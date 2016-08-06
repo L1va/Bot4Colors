@@ -157,7 +157,7 @@ def try_to_select2(cells):
         cur = 0
         for nid in c.neigh:
             cn =  c.game.cells[nid]
-            if cn.is_colored():
+            if not cn.is_colored():
                 cur+= cn.count
         if cur < bestv:
             bestv = cur
