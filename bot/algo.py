@@ -7,7 +7,7 @@ class Game:
 
     def threshold(self, fcount):
         if self.height == 10:
-            if fcount < 5:
+            if fcount < 9:
                 return 0
             return 1
         if self.height == 20:
@@ -23,7 +23,7 @@ class Game:
                 return 1               
             if fcount < 20:
                 return 2
-            if fcount > 50:
+            if fcount > 40:
                 return 1
             return 2
         if self.height == 70:
@@ -32,13 +32,13 @@ class Game:
             if fcount < 10:
                 return 1               
             if fcount < 20:
-                return 2
+                return 1
             if fcount > 80:
                 return 2
             if fcount > 60:
-                return 2
-            if fcount > 50:
-                return 2
+                return 1
+            if fcount > 40:
+                return 1
             return 2
         return 2
 
@@ -113,6 +113,7 @@ def best_step(game, col):
     best = None
     first = None
     cells_to_choose = []
+    our = []
     for c in cells:
         if c.color!=-1:
             break
@@ -122,9 +123,16 @@ def best_step(game, col):
             if best is None:
                 best = c
             if c.can_color(nextCol):
-                cells_to_choose.append(c)            
-                if first is None:
-                    first = c
+                is_neigh_to_our = False
+                for ourc in our:
+                    if c.is_neigh(ourc):
+                        is_neigh_to_our = True
+                if not is_neigh_to_our:
+                    cells_to_choose.append(c)            
+                    if first is None:
+                        first = c
+            else :
+                our.append(c)
     
     if len(cells_to_choose)>0:
         best = try_to_select2(cells_to_choose)
