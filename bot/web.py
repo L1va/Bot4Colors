@@ -26,9 +26,8 @@ def new_game_handler():
     cnt = Counter()
     for _,c in newGame.cells.items():
         cnt[c.count]+=1
-    items = cnt.items()
-    items.sort()
-    logger.info('-> %s', items)
+    items = cnt.items()    
+    logger.info('-> %s', sorted(items))
     redis_set(id, newGame)
     return jsonify(status='ok')
 

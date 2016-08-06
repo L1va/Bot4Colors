@@ -52,6 +52,9 @@ class Cell:
     def is_neigh(self, cell):
         return cell.id in self.neigh
 
+    def is_colored(self):
+        return self.color != -1
+
     def can_color(self, col):
         for neigh_id in self.neigh:
             c = self.game.cells[neigh_id]
@@ -113,7 +116,9 @@ def try_to_select2(cells):
         c = cells[i]
         cur = 0
         for nid in c.neigh:
-            cur+= c.game.cells[nid].count
+            cn =  c.game.cells[nid]
+            if cn.is_colored():
+                cur+= cn.count
         if cur < bestv:
             bestv = cur
             best = c
