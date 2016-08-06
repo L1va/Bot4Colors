@@ -4,6 +4,8 @@ from bot.algo import *
 from bot.db import *
 from bot.utils.log import make_logger
 
+from collections import Counter
+
 app = Flask(__name__)
 
 
@@ -20,6 +22,13 @@ def new_game_handler():
     logger = make_logger(app.logger, id)
     #logger.info('New game handler')
     newGame = Game(board)
+    logger.info('ALL: %s', len(newGame.cells))
+    cnt = Counter()
+    for _,c in newGame.cells.items():
+        cnt[c.count]+=1
+    items = cnt.items()
+    items.sort()
+    logger.info('-> %s', items)
     redis_set(id, newGame)
     return jsonify(status='ok')
 
@@ -61,13 +70,13 @@ def delete_handler(id):
     #logger.info('[DELETE] End of game')
 
     try:
-        game = redis_get(id)
-        if game.small():
-            logger.info('game, first: %s', game.first)
-            for _,c in game.cells.items():
-                logger.info('%s[%s] -> %s', c.id, c.color, c.neigh )
-            logger.info('our: %s', game.our_steps)
-            logger.info('all: %s', game.steps)
+        #game = redis_get(id)
+        #if game.small():
+            #logger.info('game, first: %s', game.first)
+            #for _,c in game.cells.items():
+                #logger.info('%s[%s] -> %s', c.id, c.color, c.neigh )
+            #logger.info('our: %s', game.our_steps)
+            #logger.info('all: %s', game.steps)
 
         redis_del(id)
     except:

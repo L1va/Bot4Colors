@@ -84,7 +84,7 @@ def best_step(game, col):
                 cells_to_choose.append(c)                
     
     if len(cells_to_choose)>0:
-        best = try_to_select(cells_to_choose)
+        best = try_to_select2(cells_to_choose)
 
     game.our_steps.append((best.id,col))
     return best.id
@@ -105,6 +105,19 @@ def try_to_select(cells):
             best = cells[i]
     return best
 
+def try_to_select2(cells):
+    best = cells[0]
+    bestv = 10**9
+    size = len(cells)
+    for i in range(size):
+        c = cells[i]
+        cur = 0
+        for nid in c.neigh:
+            cur+= c.game.cells[nid].count
+        if cur < bestv:
+            bestv = cur
+            best = c
+    return best
 
 def register_step(game, fig, col):
     game.cells[fig].color = col
