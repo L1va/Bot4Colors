@@ -14,7 +14,7 @@ class Game:
             if fcount < 6:
                 return 0
             if fcount > 25:
-                return 1
+                return 2
             return 1
         if self.height == 40:
             if fcount < 5:
@@ -24,7 +24,7 @@ class Game:
             if fcount < 20:
                 return 2
             if fcount > 40:
-                return 1
+                return 3
             return 2
         if self.height == 70:
             if fcount < 5:
@@ -34,11 +34,9 @@ class Game:
             if fcount < 20:
                 return 1
             if fcount > 80:
-                return 2
+                return 3
             if fcount > 60:
-                return 1
-            if fcount > 40:
-                return 1
+                return 2            
             return 2
         return 2
 
